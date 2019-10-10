@@ -1,0 +1,26 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+    <h2 class="prod-det-cat">Ваш заказ</h2>
+    <div class="block-carousel-Checkout">
+        <div class="order-info">
+            <div>
+                {% for item in cart %}
+                    <p>{{ item.product.name }} {{ item.quantity }}шт.<span> <b>{{ item.total_price }}</b> BYN</span>
+                    </p>
+                {% endfor %}
+            </div>
+            <p>Сумма: <b>{{ cart.get_total_price }}</b> BYN</p>
+        </div>
+
+        <div class="order-form">
+            <form action="." method="post" class="order-form">
+                {{ form.as_p }}
+                <p><input type="submit" value="Сделать заказ"></p>
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

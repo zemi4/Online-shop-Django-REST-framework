@@ -1,0 +1,335 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}My shop{% endblock %}</title>
+
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+    <link href="{% static "font-awesome-4.7.0/css/font-awesome.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/slick.css" %}" rel="stylesheet">
+    <link href="{% static "css/slick-theme.css" %}" rel="stylesheet">
+    <link href="{% static "css/fonts/slick.ttf" %}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+
+</head>
+<body>
+
+<div class="background" style="background-image: url(/static/images/look.jpg);">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">My Shop</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Категории</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for category in categories %}
+                                <a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Бренды</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for br in brands %}
+                                <a class="dropdown-item" href="{{ br.get_absolute_url }}">{{ br.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+
+                </ul>
+
+                <ul class="navbar-nav bar-r account">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "cart:cart_detail" %}" tabindex="-1" aria-disabled="true"><i
+                                class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            {% with total_items=cart|length %}
+                                {% if cart|length > 0 %}
+                                    <span class="badge">{{ cart.get_total_price }}</span>
+                                {% else %}
+                                    <span class="badge">0</span>
+                                {% endif %}
+                            {% endwith %}
+                        </a>
+                    </li>
+
+                    <li class="dropdown"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"><i
+                            class="fa fa-user-o" aria-hidden="true"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            {% if not request.user.is_authenticated %}
+                                <div class="navbar-content">
+                                    <div class="account-no">
+                                        <div class="col-md-12">
+                                            <p><strong>Здравствуйте гость!</strong></p>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-6"><p><a href="{% url 'registration' %}"
+                                                                            class="btn btn-primary btn-sm active reg">Регистрация</a>
+                                                </p></div>
+                                                <div class="col-md-6"><p><a href="{% url 'login' %}"
+                                                                            class="btn btn-primary btn-sm active"><i
+                                                        class="fa fa-sign-in" aria-hidden="true"></i>Войти в аккаунт</a>
+                                                </p></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}                                           <!--     ЗАрегистрированный-->
+                                <li>
+                                    <div class="navbar-content">
+                                        <div class="row">
+                                            <div class="text">
+                                                <span>Здравствуйте <b>{{ user.username }}</b></span>
+                                                <p class="text-muted small">{{ user.email }}</p>
+                                                <div class="divider"></div>
+                                                <a href="{% url 'account' %}" class="btn btn-primary btn-sm active">Личный
+                                                    кабинет</a>
+                                                <a href="{% url 'logout' %}"
+                                                   class="btn btn-primary btn-sm active">Выйти</a>
+                                            </div>
+                                            {% if user.profile.photo %}
+                                                <div class="photo"><img src="{{ user.profile.photo.url }}"
+                                                                        alt="Alternate Text" class="img-responsive"/>
+                                                </div>
+                                            {% else %}
+                                                <img src="/static/images/nopic.png" alt="...">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="navbar-footer">
+                                        <div class="navbar-footer-content">
+                                            <div class="nav-foot-row">
+                                                <div class="edit">
+                                                    <a href="{% url 'edit' %}">Редактировать профиль</a>
+                                                </div>
+                                                <br>
+                                                <div class="edit">
+                                                    <a href="{% url "password_change" %}">Изменить пароль</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+
+                <form action="{% url 'shop:elasticsearch' %}" method="GET" class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    {% block content %}
+
+        <div class="block-carousel-about animated bounceInDown">
+            <div class="tel">
+                <p><i class="fa fa-phone-square" aria-hidden="true"></i>Номера телефонов:</p>
+                <p class="a1"><img src="{% static "images/a1.jpg" %}">+375 29 630 64 94</p>
+                <p><img src="{% static "images/mts.png" %}">+375 33 630 64 94</p>
+            </div>
+            <div class="work">
+                <p><i class="fa fa-clock-o" aria-hidden="true"></i>Время работы:</p>
+                <p><b>Понедельник</b>-<b>Суббота</b> - <b>8:00</b>-<b>23:00</b></p>
+                <p><b>Воскресение</b> - <b>выходной</b></p>
+            </div>
+            <div class="address">
+                <p><i class="fa fa-car" aria-hidden="true"></i>Самовывоз:</p>
+                <p><b>г. Минск, ул. Шафарнянская д.3</b></p>
+            </div>
+        </div>
+
+        <div class="word">
+            <div class="block-carousel-mini all-catalog"><i class="fa fa-align-left" aria-hidden="true"></i>Весь каталог
+            </div>
+            <div class="block-carousel-mini new"><i class="fa fa-spinner" aria-hidden="true"></i>Новинки</div>
+            <div class="block-carousel-mini winner"><i class="fa fa-star-o" aria-hidden="true"></i>Лидеры продаж</div>
+        </div>
+
+        <div class="block-carousel-main">
+
+            <div class="carousel">
+                <div class="navbar-base">
+                    <ul class="menu">
+                        {% for category in categories %}
+                            <li class="animated infinite "><a class="dropdown-item"
+                                                              href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="carousel1">
+                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-touch="true">
+                        <div class="carousel-inner">
+                            {% for product in products %}
+                                {% if forloop.first %}
+                                    <div class="carousel-item active">
+                                        <a class="dropdown-item" href="{{ product.get_absolute_url }}">
+                                            <img src="{{ product.image.url }}" alt="..."><br>
+                                            {{ product.name }}<br>
+                                            <b>{{ product.price }}</b> BYN</a>
+                                    </div>
+                                {% else %}
+                                    <div class="carousel-item">
+                                        <a class="dropdown-item" href="{{ product.get_absolute_url }}">
+                                            <img src="{{ product.image.url }}" alt="..."><br>
+                                            {{ product.name }}<br>
+                                            <b>{{ product.price }}</b> BYN</a>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+                           data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button"
+                           data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="carousel2">
+                    <div class="any-winner1">
+                        <a class="pulse" href="{{ categories.5.slug }}"><img src="{% static "images/smartphones.jpg" %}"
+                                                                             alt="">
+                            <span class="animated infinite pulse">Смартфоны</span></a>
+                    </div>
+                    <div class="any-winner2 pulse">
+                        <a class="pulse" href="{{ categories.7.slug }}"><img class="pulse"
+                                                                             src="{% static "images/tv.jpg" %}" alt="">
+                            <span class="animated infinite pulse">Телевизоры</span></a>
+                    </div>
+                    <div class="any-winner3">
+                        <a href="{{ categories.2.slug }}"><img src="{% static "images/nout2.jpg" %}" alt="">
+                            <span class="animated infinite pulse">Ноутбуки</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="...">
+            <div class="block-carousel-mini">Выбор по брендам</div>
+            <div class="block-carousel">
+                <div class="autoplay">
+                    {% for brand in brands %}
+                        {% if brand.image %}
+                            <a class="increase" href="{{ brand.get_absolute_url }}"><img src="{{ brand.image.url }}"
+                                                                                         alt="..."></a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="parsing-main">
+            <div class="parsing block-carousel">
+                <a href="{{ habr_l1 }}">{{ habr_t1 }}</a>
+                <img src="{% if 'img' %}{{ habr_i1 }}{% else %}{% static "images/nopic.png" %}{% endif %}">
+            </div>
+
+            <div class="parsing block-carousel">
+                <a href="{{ habr_l2 }}">{{ habr_t2 }}</a>
+                <img src="{% if 'img' %}{{ habr_i2 }}{% else %}{% static "images/nopic.png" %}{% endif %}">
+            </div>
+
+            <div class="parsing block-carousel">
+                <a href="{{ habr_l3 }}">{{ habr_t3 }}</a>
+                <img src="{% if 'img' %}{{ habr_i3 }}{% else %}{% static "images/nopic.png" %}{% endif %}">
+            </div>
+        </div>
+
+
+    {% endblock %}
+
+
+    <!--footer-->
+    <div class="footer">
+        <footer class=" foot section footer-classic context-dark bg-image" style="background: #2d3246;">
+            <div class="container">
+                <div class="row row-30">
+                    <div class="col-md-4 col-xl-5">
+                        <div class="pr-xl-4">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum est eum itaque maiores
+                                mollitia nemo quos soluta unde? Alias aliquam deserunt enim iste minus natus odit
+                                placeat qui quia reiciendis?</p>
+                            <!-- Rights-->
+                            <p class="rights"><span>©  </span><span
+                                    class="copyright-year">2019</span><span> </span><span>Waves</span><span>. </span><span>All Rights Reserved.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Контакты</h5>
+                        <dl class="contact-list">
+                            <dt>Адрес:</dt>
+                            <dd>г.Минск ул.Шафарнянская д.3 оф.232</dd>
+                        </dl>
+                        <dl class="contact-list">
+                            <dt>email:</dt>
+                            <dd><a href="mailto:#">mediashop@gmail.com</a></dd>
+                        </dl>
+                        <dl class="contact-list">
+                            <dt>Телефон:</dt>
+                            <dd><a href="tel:#">+375296306494</a> <span>или</span> <a href="tel:#">+375336306494</a>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-4 col-xl-3">
+                        <h5>Links</h5>
+                        <ul class="nav-list">
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Projects</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Contacts</a></li>
+                            <li><a href="#">Pricing</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row no-gutters social-container">
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="/static/js/slick.min.js"></script>
+<script type="text/javascript" src="/static/js/Brands.js"></script>
+
+</body>
+</html>

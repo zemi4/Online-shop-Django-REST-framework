@@ -1,0 +1,48 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}Ваша корзина покупок{% endblock %}
+
+{% block content %}
+    <h2 class="heading">Ваша корзина покупок</h2>
+    <div class="context">
+        <div class="block-carousel-prod-det">
+            <div class="cart">
+                <div class="cart-2">
+                    <div class="st1"></div>
+                    <div class="st2"></div>
+                    <div class="st3"></div>
+                    <div class="st4"></div>
+                    <div class="st5">Цена за единицу товара</div>
+                    <div class="st6">Сумма</div>
+                </div>
+                {% for item in cart %}
+                    {% with product=item.product %}
+                        <div class="cart-2">
+                            <div class="st1"><a href="{{ product.get_absolute_url }}">
+                                <img src="{% if product.image %}{{ product.image.url }}
+                                          {% else %}{% static "images/nopic.png" %}
+                                          {% endif %}"></a>
+                            </div>
+                            <div class="st2">{{ product.name }}</div>
+                            <div class="st3">{{ item.quantity }}<br>шт.</div>
+                            <div class="st4"><a href="{% url "cart:cart_remove" product.id %}">Удалить из корзины</a>
+                            </div>
+                            <div class="st5 num">{{ item.price }}<br>BYN</div>
+                            <div class="st6 num">{{ item.total_price }}<br>BYN</div>
+                        </div>
+                    {% endwith %}
+                {% endfor %}
+            </div>
+
+            <div class="total">
+                <div class="num"><b>Общая стоимость: {{ cart.get_total_price }} BYN</b></div>
+                <div class="cash"><a href="{% url "orders:order_create" %}" class="cash"><b>КУПИТЬ</b></a></div>
+            </div>
+
+
+            <p class="text-right">
+                <a href="{% url "shop:product_list" %}" class="button continued">Продолжить покупки</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

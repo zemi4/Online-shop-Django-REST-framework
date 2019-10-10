@@ -1,0 +1,24 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}
+    {% if category %}{{ category.title }}{% else %}Products{% endif %}
+{% endblock %}
+
+{% block content %}
+    <h2><a class="prod-det-cat" href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h2>
+    <div class="block-carousel-prod-det">
+        <h1>{{ product.name }}</h1>
+        <div class="product-detail">
+            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "images/nopic.png" %}{% endif %}">
+            <p>{{ product.description|linebreaks }}</p>
+        </div>
+        <p class="price"><b>{{ product.price }}</b> BYN</p>
+        <form action="{% url "cart:cart_add" product.id %}" method="post">
+            {{ cart_product_form }}
+            {% csrf_token %}
+            <input type="submit" value="Добавить в корзину">
+        </form>
+    </div>
+{% endblock %}
+
+

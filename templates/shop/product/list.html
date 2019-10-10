@@ -1,0 +1,41 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}
+    {% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="col-lg-12 heading">
+        <h2 class="h2-cat">{{ category.name }}</h2>
+    </div>
+
+    <div class="box">
+        {% for product in products %}
+            <div class="block-carousel-cat">
+                <div class="block_images_cat">
+                    <img class="img_cat" src="{{ product.image.url }}">
+                </div>
+                <div class="card-block">
+                    <figure class="profile">
+                        <img class="profile-avatar" src="{% if product.image %}{{ product.image.url }}
+                         {% else %}{% static "images/nopic.png" %}{% endif %}">
+                    </figure>
+                    <h4 class="card-title mt-3">{{ product.title }}</h4>
+                    <div class="meta card-text">
+                        <a>{{ category.name }}</a>
+                    </div>
+                    <div class="card-text">
+                        {{ product.description }}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <h2><strong>{{ product.price }}</strong></h2>
+                    <a href="{{ product.get_absolute_url }}">
+                        <button class="btn btn-info float-right btn-sm">Подробнее</button>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

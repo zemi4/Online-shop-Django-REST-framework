@@ -1,0 +1,16 @@
+{% extends "shop/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Редактирование профиля{% endblock %}
+
+{% block content %}
+    <h2 class="heading">Редактирование профиля</h2>
+    <div class="block-carousel-edit">
+    <form action="." method="post" enctype="multipart/form-data">
+        {{ user_form|crispy}}
+        {{ profile_form|crispy }}
+        {% csrf_token %}
+        <p><input type="submit" value="Save changes"></p>
+    </form>
+    </div>
+{% endblock %}

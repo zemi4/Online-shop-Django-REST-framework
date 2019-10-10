@@ -1,0 +1,17 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}Поиск{% endblock %}
+
+{% block content %}
+
+    <div class="col-lg-12 heading">
+        <h2 class="h2-cat">Elasticsearch result:</h2>
+    </div>
+
+    <div class="context">
+        {% for result in search_result %}
+            {{ result.name }}<br>
+            {{ result.description }}<br>
+        {% endfor %}
+    </div>
+{% endblock %}
