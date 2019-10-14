@@ -1,3 +1,5 @@
 *.sqlite3
 *.bak
 .idea
+__pycache__
+venv

@@ -22,17 +22,15 @@ STATICFILE_DIR = os.path.join(BASE_DIR, 'static')
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '^m$8obfz@jther&)n5wyx40p6uuk*-e)&!$8r_&h2o8r5e@q)8'
-import os
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '^m$8obfz@jther&)n5wyx40p6uuk*-e)&!$8r_&h2o8r5e@q)8')
+SECRET_KEY = '^m$8obfz@jther&)n5wyx40p6uuk*-e)&!$8r_&h2o8r5e@q)8'
+# import os
+# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '^m$8obfz@jther&)n5wyx40p6uuk*-e)&!$8r_&h2o8r5e@q)8')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
+DEBUG = True
+# DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-# ALLOWED_HOSTS = []
-# Set hosts to allow any app on Heroku and the local testing URL
-ALLOWED_HOSTS = ['.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -171,19 +169,3 @@ CART_SESSION_ID = 'cart'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = '/'
-
-
-# Heroku: Update database configuration from $DATABASE_URL.
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-
-
-# Static file serving.
-# http://whitenoise.evans.io/en/stable/django.html#django-middleware
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
-# Static file serving.
-# http://whitenoise.evans.io/en/stable/django.html#django-middleware
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
