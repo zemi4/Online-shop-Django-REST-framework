@@ -6,7 +6,8 @@ Online shop Django
 
 
 <b></b>
-,<br>
-http://zemi4.pythonanywhere.com/,<br>
+<br>
+http://zemi4.pythonanywhere.com/,
+<br>
 http://zemi4.pythonanywhere.com/api/,<br>
 http://zemi4.pythonanywhere.com/admin/
