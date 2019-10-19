@@ -12,5 +12,5 @@ http://zemi4.pythonanywhere.com/,
 <br>
 <b>API</b><br>
 http://zemi4.pythonanywhere.com/api/<br>
-<b>Админка</b><br>
+<b>Админка</b> имя и пароль - zemi4<br>
 http://zemi4.pythonanywhere.com/admin/
