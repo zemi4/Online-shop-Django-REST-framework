@@ -9,5 +9,8 @@ Online shop Django
 <br>
 http://zemi4.pythonanywhere.com/,
 <br>
-http://zemi4.pythonanywhere.com/api/,<br>
+<br>
+<b>API</b><br>
+http://zemi4.pythonanywhere.com/api/<br>
+<b>Админка</b><br>
 http://zemi4.pythonanywhere.com/admin/
