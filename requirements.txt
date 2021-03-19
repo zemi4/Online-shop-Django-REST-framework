@@ -9,7 +9,7 @@ dj-database-url==0.5.0
 Django==2.2.5
 django-crispy-forms==1.7.2
 django-elasticsearch-dsl==7.0.0
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 elasticsearch==7.0.4
 elasticsearch-dsl==7.0.0
 gunicorn==19.9.0
